@@ -23,7 +23,7 @@ export function Login() {
         setIsSubmitting(true);
       try {
         const response = await axios.post(
-          `https://stllbusqrcode.vercel.app/api/auth/fiscales`,
+          `https://busqrcode-torbes.vercel.app/api/auth/fiscales`,
           { username, password }
         );
         if (response.status === 200) {
@@ -60,7 +60,7 @@ if(user!==null){
           <Text className='text-xl text-black text-black/90 '>Iniciar Sesión como Fiscal</Text>
         </View>
         <Logo1 />
-        <Text className="text-xl text-black text-black/90 ">Línea Santa Teresa</Text>
+        <Text className="text-xl text-black text-black/90 ">Línea Torbes Barrios</Text>
       </View>
       <View className="mb-10 rounded-sm bg-slate-200 shadow-default dark:border-strokedark dark:bg-boxdark">
         <View className="flex justify-center items-center m-5">

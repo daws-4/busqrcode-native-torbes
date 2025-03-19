@@ -13,13 +13,13 @@
         "buildType": "apk"
       },
       "env": {
-        "API": "https://stllbusqrcode.vercel.app"
+        "API": "https://busqrcode-torbes.vercel.app"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "API": "https://stllbusqrcode.vercel.app"
+        "API": "https://busqrcode-torbes.vercel.app"
       }
     }
   },

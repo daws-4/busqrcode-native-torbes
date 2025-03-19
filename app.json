@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "busqrcode STLL",
-    "slug": "busqrcode_native",
+    "name": "busqrcode Torbes",
+    "slug": "busqrcode-torbes",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,7 +25,7 @@
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.dawszz_4.busqrcode_native"
+      "package": "com.dawszz_4.busqrcodetorbes"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,11 +42,11 @@
       ],
       "expo-build-properties"
     ],
+    "owner": "dawszz_4",
     "extra": {
       "eas": {
-        "projectId": "7a84ab09-39ee-4bfa-a4d4-7cfb97c8ab0e"
+        "projectId": "9263b4c1-092f-4be3-849e-7d08f56863d8"
       }
-    },
-    "owner": "dawszz_4"
+    }
   }
 }

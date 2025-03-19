@@ -50,7 +50,7 @@ export function Main() {
     const fetchData = async () => {
       setIsLoading(true); // Iniciar carga
       try {
-        const data = (await axios.get(`https://stllbusqrcode.vercel.app/api/app/rutas`)).data;
+        const data = (await axios.get(`https://busqrcode-torbes.vercel.app/api/app/rutas`)).data;
         let rutasl = [];
         for (let r of data) {
           for (let f of r.fiscales) {
@@ -59,10 +59,10 @@ export function Main() {
             }
           }
         }
-        const buses = (await axios.get(`https://stllbusqrcode.vercel.app/api/app/unidades`)).data;
+        const buses = (await axios.get(`https://busqrcode-torbes.vercel.app/api/app/unidades`)).data;
    
         if(user.sethora){
-          const response  = (await axios.post(`https://stllbusqrcode.vercel.app/api/app/timestamp/fiscal`, {
+          const response  = (await axios.post(`https://busqrcode-torbes.vercel.app/api/app/timestamp/fiscal`, {
             numero_fiscal: user.numero,
             id_fiscal: user._id,
           }));
@@ -86,7 +86,7 @@ export function Main() {
   const sendQueueRequest = async (request) => {
     try {
         const response = await Promise.race([
-        axios.post(`https://stllbusqrcode.vercel.app/api/app/timestamp`, request),
+        axios.post(`https://busqrcode-torbes.vercel.app/api/app/timestamp`, request),
         new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000))
       ]);
 
@@ -105,7 +105,7 @@ export function Main() {
   setIsSubmitting(true); 
     try {
       const response = await Promise.race([
-        axios.post(`https://stllbusqrcode.vercel.app/api/app/timestamp`, request),
+        axios.post(`https://busqrcode-torbes.vercel.app/api/app/timestamp`, request),
         new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000))
       ]);
 
