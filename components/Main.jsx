@@ -189,7 +189,7 @@ export function Main() {
         busQueue.splice(currentIndex, 1);
       } else {
         // Si la petición no se envió, agrega el elemento al backupQueue y avanza el índice
-        alert('No se pudo enviar la petición de la cola');
+        // alert('No se pudo enviar la petición de la cola');
         backupQueue.push(nextRequest);
         currentIndex++;
       }
