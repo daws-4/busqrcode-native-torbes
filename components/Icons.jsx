@@ -2,6 +2,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 export const CircleInfoIcon = (props) => (
   <FontAwesome6 name="circle-info" size={24} color="black" {...props} />
@@ -30,3 +31,7 @@ export const FlashOn = (props) => (
 export const FlashOff = (props) => (
   <Ionicons name="flash-off" size={24} color="black" />
 )
+
+export const DeleteIcon = (props) => (
+  <AntDesign name="delete" size={24} color="black" />
+);

@@ -1,6 +1,6 @@
 import { Screen } from "../../components/Screen"
 import {useEffect, useState} from "react"
-import { View, Text, Pressable } from "react-native"
+import { View, Text, Pressable, ScrollView } from "react-native"
 import { useBusIdContext, useBusIdToggleContext, useBusListContext } from "../../lib/AuthProvider";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { FlashOff, FlashOn } from "../../components/Icons";
@@ -67,6 +67,7 @@ export default function Scanqr() {
 
     return (
       <Screen>
+        <ScrollView>
         <View className="flex flex-col justify-center items-center">
           {permission ? (
             <CameraView
@@ -92,20 +93,7 @@ export default function Scanqr() {
               <Text className="text-black text-black/90 mb-2 mx-4 text-lg">
                 <Text className="font-bold text-black">Unidad: </Text>
                 {busData.numero}
-                <Text className="font-bold text-black"> Placa: </Text>
-                {busData.placa}
               </Text>
-              <Text className="text-black text-black/90 mb-2 mx-4 text-lg">
-                <Text className="font-bold text-black">Conductor: </Text>
-                {busData.nombre_conductor}
-              </Text>
-              <Text className="text-black text-black/90 mb-2 mx-4 text-lg">
-                <Text className="font-bold text-black">
-                  Teléfono del Conductor:
-                </Text>
-                {busData.telefono_conductor}
-              </Text>
-
               <View>
                 <Pressable
                   onPress={() => {
@@ -131,6 +119,7 @@ export default function Scanqr() {
             </View>
           )}
         </View>
+        </ScrollView>
       </Screen>
     );
 }

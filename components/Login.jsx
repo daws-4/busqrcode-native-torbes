@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { View, Text, TextInput, Pressable } from "react-native";
 import { Logo1 } from "./Logo1";
 import axios from "axios";
-import { useUserContext, useUserToggleContext, useBusListContext, useBusListToggleContext } from "../lib/AuthProvider";
+import { useUserContext, useUserToggleContext, useBusListContext, useBusListToggleContext, UrlConnectionContext } from "../lib/AuthProvider";
 import { API } from '@env'
 import { StatusBar } from "expo-status-bar";
 export function Login() {
@@ -17,13 +17,14 @@ export function Login() {
   const login = useUserToggleContext();
   const busList = useBusListContext();
   const now = new Date();
+  const url = UrlConnectionContext()
   const submitData = async () => {
      if (isSubmitting) return;
     if (username != "" && password != "") {
         setIsSubmitting(true);
       try {
         const response = await axios.post(
-          `https://busqrcode-torbes.vercel.app/api/auth/fiscales`,
+          `${url}/api/auth/fiscales`,
           { username, password }
         );
         if (response.status === 200) {
@@ -60,7 +61,7 @@ if(user!==null){
           <Text className='text-xl text-black text-black/90 '>Iniciar Sesión como Fiscal</Text>
         </View>
         <Logo1 />
-        <Text className="text-xl text-black text-black/90 ">Línea Torbes Barrios</Text>
+        <Text className="text-xl text-black text-black/90 ">Línea Santa Teresa</Text>
       </View>
       <View className="mb-10 rounded-sm bg-slate-200 shadow-default dark:border-strokedark dark:bg-boxdark">
         <View className="flex justify-center items-center m-5">
