@@ -8,61 +8,57 @@ import { router, Link } from "expo-router";
 import axios from "axios";
 import { API } from "@env";
 export default function Scanqr() {
-    const [permission, requestPermission] = useCameraPermissions();
-    const [flash, setFlash] = useState(false);
-    const [type, setType] = useState("back");
-    const [text, setText] = useState("");
-    const [busId, setBusId] = useState(null);
-    const busData = useBusIdContext();
-    const busList = useBusListContext();
-    const setBusData = useBusIdToggleContext();
-    
-   if (!permission) {
-     requestPermission();
-   }
-    useEffect(() => {
-        const fetchData = async () => {
-            if (!permission) {
-                requestPermission();
-            }
-        };
-        fetchData();
-    }, []);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [flash, setFlash] = useState(false);
+  const [type, setType] = useState("back");
+  const [text, setText] = useState("");
+  const [busId, setBusId] = useState(null);
+  const busData = useBusIdContext();
+  const busList = useBusListContext();
+  const setBusData = useBusIdToggleContext();
 
-     const handleBarCodeScanned = async ({ type, data }) => {
-       if (data == busId) return ;
-       setBusId(data);
-       let found = false;
-       try{
-         busList.map((bus) => {
-           if(bus._id == data){
-             setBusData(bus)
-             console.log(bus)
-            found = true;
-            }
-         } );  
-         if (!found) {
-           // Si no se encontró ninguna coincidencia
-           alert("Este código QR no corresponde a ninguna unidad");
-         }
-       }catch(error){
-        alert("Este código QR no corresponede a ninguna unidad");
-         console.log(error + " error");
-       }
-       console.log("Type: " + type + "\nData: " + data);
-     };
-      if (busData) {
-        console.log(busData, "test");
+  if (!permission) {
+    requestPermission();
+  }
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!permission) {
+        requestPermission();
       }
+    };
+    fetchData();
+  }, []);
 
-     const toggleFlash = () => {
-       setFlash(
-         flash === false
-           ? true
-           : false
-       );
-       console.log(flash);
-     };
+  const handleBarCodeScanned = async ({ type, data }) => {
+    if (data == busId) return;
+    setBusId(data);
+    let found = false;
+    try {
+      busList.map((bus) => {
+        if (bus._id == data) {
+          setBusData(bus);
+          console.log(bus);
+          found = true;
+        }
+      });
+      if (!found) {
+        // Si no se encontró ninguna coincidencia
+        alert("Este código QR no corresponde a ninguna unidad");
+      }
+    } catch (error) {
+      alert("Este código QR no corresponede a ninguna unidad");
+      console.log(error + " error");
+    }
+    console.log("Type: " + type + "\nData: " + data);
+  };
+  if (busData) {
+    console.log(busData, "test");
+  }
+
+  const toggleFlash = () => {
+    setFlash(flash === false ? true : false);
+    console.log(flash);
+  };
 
 
     return (
@@ -76,18 +72,16 @@ export default function Scanqr() {
               enableTorch={flash}
               style={{ width: 400, height: 400 }}
             >
-              <View className='flex p-4 w-14'>
-
-              <Pressable onPress={toggleFlash} className='bg-slate-100 '>
-                {flash ? <FlashOn /> : <FlashOff />}
-              </Pressable>
+              <View className="flex p-4 w-14">
+                <Pressable onPress={toggleFlash} className="bg-slate-100 ">
+                  {flash ? <FlashOn /> : <FlashOff />}
+                </Pressable>
               </View>
             </CameraView>
           ) : (
             <Text>Se han negado los permisos a la cámara</Text>
           )}
-          <Pressable onPress={toggleFlash} >
-          </Pressable>
+          <Pressable onPress={toggleFlash}></Pressable>
           {busData ? (
             <View className="mt-6 p-4">
               <Text className="text-black text-black/90 mb-2 mx-4 text-lg">
