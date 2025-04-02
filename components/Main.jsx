@@ -56,8 +56,6 @@ export function Main() {
 
   //-------------------------- IMPORTANTE -----------------------
 
-  //            Mostrar si el autobús va retardado en base al registro anterior
-
   // ----------------      PENDIENTE ----------------------
   const fetchData = async () => {
     setIsLoading(true); // Iniciar carga
@@ -141,6 +139,10 @@ export function Main() {
   };
 
   //petición de la cola hacia el servidor
+
+  // arreglar enviar arreglo en vez de individualmente
+
+  //
   const sendQueueRequest = async (request) => {
     try {
       const response = await Promise.race([
@@ -149,12 +151,12 @@ export function Main() {
           setTimeout(() => reject(new Error("timeout")), 5000)
         ),
       ]);
-        if(response.status === 201){
-          alert('La unidad está retartada')
-          return true
-        }
-      if (response.status === 200) {
-        alert("Datos enviados correctamente desde la cola");
+      // if(response.status === 201){
+      //   alert('La unidad está retartada')
+      //   return false
+      // }
+      if (response.status === 200 || response.status === 201) {
+        // alert("Datos enviados correctamente desde la cola");
         // setBusQueue([...busQueue.filter((r) => r !== request)]);
         return true; // Indicar que la petición se envió correctamente
       }
@@ -175,9 +177,13 @@ export function Main() {
       ]);
 
       if (response.status === 201) {
-        {response.data.delay == 1
-          ? alert(`La unidad tiene ${response.data.delay} minuto de retraso`)
-          : alert(`La unidad tiene ${response.data.delay} minutos de retraso`); }
+        {
+          response.data.delay == 1
+            ? alert(`La unidad tiene ${response.data.delay} minuto de retraso`)
+            : alert(
+                `La unidad tiene ${response.data.delay} minutos de retraso`
+              );
+        }
         console.log(response.data.delay);
         return true;
       }
@@ -185,7 +191,7 @@ export function Main() {
       if (response.status === 200) {
         alert("Datos enviados correctamente");
         // setTimeout(() => alert(''), 3000);
-        return true; // Indicar que la petición se envió correctamente
+        return false; // Indicar que la petición se envió correctamente
       }
     } catch (error) {
       console.log(error + " error");
@@ -228,7 +234,17 @@ export function Main() {
           setSelectedRuta(null);
           setBusData(null);
         } else {
-          setBusQueue([...busQueue, request]);
+          // Verificar si el registro ya existe en la cola
+          const existsInQueue = busQueue.some(
+            (item) =>
+              item.id_unidad === request.id_unidad &&
+              item.timestamp_salida === request.timestamp_salida
+          );
+
+          if (!existsInQueue) {
+            setBusQueue([...busQueue, request]);
+          }
+
           setSelectedRuta(null);
           setBusData(null);
         }
@@ -240,41 +256,42 @@ export function Main() {
       alert("Debes seleccionar ruta y autobús");
     }
   };
-
   //
   // Procesar la cola de peticiones pendientes cada 10 segundos si hay conexión a internet y la cola no está vacía
   const processQueue = async () => {
     if (isProcessingQueue || busQueue.length === 0) return;
     setIsProcessingQueue(true);
-    let backupQueue = new Set();
-    let currentIndex = 0;
 
-    while (currentIndex < busQueue.length) {
-      const nextRequest = busQueue[currentIndex];
+    const updatedQueue = [...busQueue]; // Copia de la cola actual
+    const failedRequests = []; // Lista para almacenar las peticiones fallidas
+
+    for (let i = 0; i < updatedQueue.length; i++) {
+      const nextRequest = updatedQueue[i];
       const bus = busList.find((b) => b._id === nextRequest.id_unidad)?.numero;
+
       const sent = await sendQueueRequest(nextRequest);
 
       if (sent) {
-        console.log("se envió la unidad: ", bus);
-        // Si la petición se envió correctamente, elimina el elemento del busQueue
-        busQueue.splice(currentIndex, 1);
+        console.log("Se envió la unidad: ", bus);
       } else {
-        console.log("fallo en el envío de la unidad: ", bus);
-
-        // Si la petición no se envió, agrega el elemento al backupQueue y avanza el índice
-        backupQueue.add(nextRequest);
-        currentIndex++;
+        console.log("Fallo en el envío de la unidad: ", bus);
+        failedRequests.push(nextRequest); // Agregar a la lista de fallidos
       }
     }
 
+    // Actualizar la cola con las peticiones fallidas
+    setBusQueue(failedRequests);
     setIsProcessingQueue(false);
-    setBusQueue([...backupQueue]); // Combinar backupQueue y busQueue sin duplicados
+
+    if (failedRequests.length === 0) {
+      alert("Todos los datos de la cola se enviaron correctamente");
+    }
   };
 
   useEffect(() => {
     let intervalId;
 
-    if (busQueue.length > 0) {
+    if (busQueue.length > 0 && !isProcessingQueue) {
       console.log(busQueue, "datos de la cola", busQueue.length);
       intervalId = setInterval(() => {
         processQueue();
