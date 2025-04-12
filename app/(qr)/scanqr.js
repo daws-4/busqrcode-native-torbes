@@ -95,6 +95,7 @@ export default function Scanqr() {
                 <Text className="font-bold text-black">Unidad: </Text>
                 {busData.numero}
               </Text>
+
               <View>
                 <Pressable
                   onPress={() => {
